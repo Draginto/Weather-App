@@ -12,6 +12,15 @@ const Weather = (props) => {
   const [location, setLocation] = useState('');
   const [formData, setFormData] = useState({});
 
+  const getLocationGeoCoordinates = (locationData) =>
+    axios
+      .get(
+        `https://api.openweathermap.org/geo/1.0/direct?q=${
+          locationData || 'New+York'
+        }&limit=5&appid=e495de1eca56adfc01f9485fd2316a63`
+      )
+      .then((response) => (formData['weather'] = response));
+
   const handleChange = (event) => {
     setLocation(event.target.value);
   };
@@ -19,6 +28,7 @@ const Weather = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     setFormData({ query: location });
+    getLocationGeoCoordinates(location);
     setLocation('');
   };
 
@@ -26,7 +36,7 @@ const Weather = (props) => {
     const fetchWeather = () =>
       axios
         .get(
-          'https://api.openweathermap.org/data/2.5/forecast?lat=30&lon=30&appid=e495de1eca56adfc01f9485fd2316a63'
+          `https://api.openweathermap.org/data/2.5/forecast?lat=40.7128&lon=74.0060&appid=e495de1eca56adfc01f9485fd2316a63`
         )
         .then((response) => console.log(response))
         .catch((error) => console.log(error));
@@ -34,7 +44,7 @@ const Weather = (props) => {
 
   return (
     <WeatherContext.Provider value={formData}>
-      <Container classes="mt-2 border rounded p-2">
+      <Container classes="mt-2 border rounded p-4">
         <Row>
           <div className="col-md-6">
             <form onSubmit={handleSubmit}>
@@ -46,7 +56,6 @@ const Weather = (props) => {
               />
             </form>
             <CurrentWeather />
-            {/* <Forecast /> */}
           </div>
           <div className="col-md-6">test</div>
         </Row>

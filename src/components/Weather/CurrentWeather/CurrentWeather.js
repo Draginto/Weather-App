@@ -3,7 +3,7 @@ import { WeatherContext } from '../../weather-context/weather-context';
 
 const CurrentWeather = (props) => {
   const value = useContext(WeatherContext);
-  return value['query'];
+  return <h1>{value['query']}</h1>;
 };
 
 export default CurrentWeather;
