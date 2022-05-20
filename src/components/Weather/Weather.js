@@ -8,6 +8,7 @@ import SentimentAnalysis from '../SentimentAnalysis/SentimentAnalysis';
 import DateTime from './DateTime/DateTime';
 import Search from '../shared/Search';
 
+import { getGeoLocationCoordinates } from '../utils/getGeoLocationCoordinates';
 import { WeatherContext } from '../weather-context/weather-context';
 
 import styled from 'styled-components';
@@ -22,16 +23,11 @@ const Weather = (props) => {
   const [location, setLocation] = useState('');
   const [formData, setFormData] = useState({});
 
-  const getLocationGeoCoordinates = (locationData) => {
-    axios
-      .get(
-        `https://api.openweathermap.org/geo/1.0/direct?q=${
-          locationData || 'New+York'
-        }&limit=5&appid=e495de1eca56adfc01f9485fd2316a63`
-      )
-      .then((response) => {
-        return response;
-      });
+  const fetchWeather = async (lat, long) => {
+    const response = await axios.get(
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=e495de1eca56adfc01f9485fd2316a63`
+    );
+    return response.data;
   };
 
   const handleChange = (event) => {
@@ -40,32 +36,9 @@ const Weather = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setFormData({ ...formData, query: location });
+    setFormData({ ...formData, location: getGeoLocationCoordinates(location) });
     setLocation('');
   };
-
-  const getCurrentLocation = () => {
-    const coords = {};
-    navigator.geolocation.getCurrentPosition((position) => {
-      coords['lat'] = position.coords.latitude;
-      coords['long'] = position.coords.longitude;
-      return coords;
-    });
-    return coords;
-  };
-
-  useEffect(() => {
-    const { lat, long } = getCurrentLocation();
-    const fetchWeather = () => {
-      axios
-        .get(
-          `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=e495de1eca56adfc01f9485fd2316a63`
-        )
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
-    };
-    fetchWeather();
-  }, []);
 
   return (
     <WeatherContext.Provider value={formData}>
