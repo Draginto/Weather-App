@@ -25,7 +25,7 @@ const Weather = (props) => {
 
   const fetchWeather = async (lat, long) => {
     const response = await axios.get(
-      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=e495de1eca56adfc01f9485fd2316a63`
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=`
     );
     return response.data;
   };
