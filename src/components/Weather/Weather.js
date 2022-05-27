@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -11,7 +10,9 @@ import DateTime from './DateTime/DateTime';
 import Search from '../shared/Search';
 
 import { getGeoLocationCoordinates } from '../utils/getGeoLocationCoordinates';
+import { fetchWeather } from "../utils/fetchWeather";
 import { WeatherContext } from '../weather-context/weather-context';
+import WeeklyWeather from './WeeklyWeather/WeeklyWeather';
 
 const FlexBlock = styled.div`
   display: flex;
@@ -21,35 +22,33 @@ const FlexBlock = styled.div`
 
 const Weather = () => {
   const [location, setLocation] = useState('');
-  const [formData, setFormData] = useState({});
-  
-  const fetchWeather = async (lat, long) => {
-    // fetch 
-    const response = await axios.get(
-      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=`
-    );
-    return response.data;
-  };
+  const [formData, setFormData] = useState({lat: 0, lon: 0, list: []});
 
   const handleChange = (event) => {
     setLocation(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    setFormData({...formData, coord: getGeoLocationCoordinates(event.target.value)});
-    console.log(formData["coord"]);
-    console.log(await fetchWeather(formData["coord"]["lat"], formData["coord"]["lon"]));
+    getGeoLocationCoordinates(event.target.value).then((response) => {
+      setFormData({...formData, lat: response.lat, lon: response.lon});
+    })
+    
+    fetchWeather(formData.lat, formData.lon).then((response) => {
+      setFormData({...formData, todayTemp: Math.round(response.list[0].main.temp), list: response.list});
+    })
+    
     setLocation('');
   };
 
   return (
-    <WeatherContext.Provider value="72">
+    <WeatherContext.Provider value={formData.todayTemp}>
       <Container classes="mt-2 border rounded p-4">
         <Row>
           <div className="col-md-6">
             <form onSubmit={handleSubmit}>
               <Search
+                type="text"
                 className="form-control"
                 placeholder="Search for city, state or zip code"
                 value={location}
@@ -63,6 +62,11 @@ const Weather = () => {
           </div>
           <div className="col-md-6">
             <DateTime />
+          </div>
+          </Row>
+          <Row rowColumns="row-cols-5">
+          <div className='col-md-12'>
+            <WeeklyWeather weatherData={formData.list}/>
           </div>
         </Row>
       </Container>
