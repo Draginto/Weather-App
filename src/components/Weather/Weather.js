@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+
+import styled from 'styled-components';
 
 import Container from '../Container/Container';
 import Row from '../Row/Row';
@@ -11,19 +13,18 @@ import Search from '../shared/Search';
 import { getGeoLocationCoordinates } from '../utils/getGeoLocationCoordinates';
 import { WeatherContext } from '../weather-context/weather-context';
 
-import styled from 'styled-components';
-
 const FlexBlock = styled.div`
   display: flex;
   align-content: center;
   align-items: center;
 `;
 
-const Weather = (props) => {
+const Weather = () => {
   const [location, setLocation] = useState('');
   const [formData, setFormData] = useState({});
-
+  
   const fetchWeather = async (lat, long) => {
+    // fetch 
     const response = await axios.get(
       `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=`
     );
@@ -34,14 +35,16 @@ const Weather = (props) => {
     setLocation(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setFormData({ ...formData, location: getGeoLocationCoordinates(location) });
+    setFormData({...formData, coord: getGeoLocationCoordinates(event.target.value)});
+    console.log(formData["coord"]);
+    console.log(await fetchWeather(formData["coord"]["lat"], formData["coord"]["lon"]));
     setLocation('');
   };
 
   return (
-    <WeatherContext.Provider value={formData}>
+    <WeatherContext.Provider value="72">
       <Container classes="mt-2 border rounded p-4">
         <Row>
           <div className="col-md-6">
