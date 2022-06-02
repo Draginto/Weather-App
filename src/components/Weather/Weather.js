@@ -9,7 +9,7 @@ import SentimentAnalysis from '../SentimentAnalysis/SentimentAnalysis';
 import DateTime from './DateTime/DateTime';
 import Search from '../shared/Search';
 
-import { getGeoLocationCoordinatesFromApi } from '../utils/getGeoLocationCoordinates';
+import { getGeoLocationCoordinatesFromApi } from '../utils/getGeoLocationCoordinatesFromApi';
 import { fetchWeather } from "../utils/fetchWeather";
 import WeeklyWeather from './WeeklyWeather/WeeklyWeather';
 
