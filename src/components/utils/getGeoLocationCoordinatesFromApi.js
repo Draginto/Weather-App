@@ -1,6 +1,6 @@
 import axios from 'axios';
 //TODO: Needs to be updated for extra fields like zip code, state and city.
-export const getGeoLocationCoordinates = (locationArea) => {
+export const getGeoLocationCoordinatesFromApi = (locationArea) => {
   // Recieves coordinate data from API and returns geocoordinate data as an object in a promise.
   const response = axios
     .get(

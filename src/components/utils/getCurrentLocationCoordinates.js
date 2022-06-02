@@ -1,9 +1,9 @@
-export const getCurrentLocation = () => {
-  const geoPosition = {};
+export const getCurrentLocationCoordinates = () => {
+  const geoPosition = [];
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition((position) => {
-      geoPosition['lat'] = position.coords.latitude;
-      geoPosition['long'] = position.coords.longitude;
+      geoPosition.push(position.coords.latitude);
+      geoPosition.push(position.coords.longitude);
     });
   } else {
     console.log('Geolocation is not available');

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -9,9 +9,8 @@ import SentimentAnalysis from '../SentimentAnalysis/SentimentAnalysis';
 import DateTime from './DateTime/DateTime';
 import Search from '../shared/Search';
 
-import { getGeoLocationCoordinates } from '../utils/getGeoLocationCoordinates';
+import { getGeoLocationCoordinatesFromApi } from '../utils/getGeoLocationCoordinates';
 import { fetchWeather } from "../utils/fetchWeather";
-import { WeatherContext } from '../weather-context/weather-context';
 import WeeklyWeather from './WeeklyWeather/WeeklyWeather';
 
 const FlexBlock = styled.div`
@@ -30,7 +29,7 @@ const Weather = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    getGeoLocationCoordinates(event.target.value).then((response) => {
+    getGeoLocationCoordinatesFromApi(event.target.value).then((response) => {
       setFormData({...formData, lat: response.lat, lon: response.lon});
     })
     
@@ -41,8 +40,11 @@ const Weather = () => {
     setLocation('');
   };
 
+  useEffect(() => {
+    
+  }, [formData]);
+
   return (
-    <WeatherContext.Provider value={formData.todayTemp}>
       <Container classes="mt-2 border rounded p-4">
         <Row>
           <div className="col-md-6">
@@ -57,20 +59,17 @@ const Weather = () => {
             </form>
             <FlexBlock>
               <CurrentWeather />
-              <SentimentAnalysis className="ml-2" />
+              {formData.todayTemp && <SentimentAnalysis className="ml-2" />}
             </FlexBlock>
           </div>
           <div className="col-md-6">
             <DateTime />
           </div>
           </Row>
-          <Row rowColumns="row-cols-5">
-          <div className='col-md-12'>
+          <Row>
             <WeeklyWeather weatherData={formData.list}/>
-          </div>
         </Row>
       </Container>
-    </WeatherContext.Provider>
   );
 };
 

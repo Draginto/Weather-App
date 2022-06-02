@@ -10,7 +10,7 @@ const Heading = styled.h1`
 
 const CurrentWeather = (props) => {
   const value = useContext(WeatherContext);
-  return <Heading>{value}°</Heading>;
+  return <>{value ? <Heading>{value}°</Heading> : ""}</>;
 };
 
 export default CurrentWeather;

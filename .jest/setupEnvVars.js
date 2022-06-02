@@ -1,0 +1,1 @@
+process.env.REACT_APP_WEATHER_API_KEY="e495de1eca56adfc01f9485fd2316a63"
