@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { WeatherContext } from '../../weather-context/weather-context';
+import React from 'react';
 
 import styled from 'styled-components';
 
@@ -9,8 +8,11 @@ const Heading = styled.h1`
 `;
 
 const CurrentWeather = (props) => {
-  const value = useContext(WeatherContext);
-  return <>{value ? <Heading>{value}°</Heading> : ""}</>;
+  return (
+    <>
+      <Heading>{props.todayTemp ? props.todayTemp + '°' : ''}</Heading>
+    </>
+  );
 };
 
 export default CurrentWeather;

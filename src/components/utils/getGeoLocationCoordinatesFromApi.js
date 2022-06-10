@@ -7,10 +7,15 @@ export const getGeoLocationCoordinatesFromApi = (locationArea) => {
       `https://api.openweathermap.org/geo/1.0/direct?q=${
         locationArea || 'New+York'
       }&limit=1&appid=${process.env.REACT_APP_WEATHER_API_KEY}`
-    ).then((response) => {
+    )
+    .then((response) => {
       return response.data[0];
-    }).then((coords) => {
-      return {lat: coords["lat"], lon: coords["lon"]};
-    }).catch(err => {throw new Error(err)});
-    return response;
+    })
+    .then((coords) => {
+      return { lat: coords['lat'], lon: coords['lon'] };
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+  return response;
 };

@@ -1,8 +1,10 @@
-const {getGeoLocationCoordinatesFromApi} = require("../src/components/utils/getGeoLocationCoordinatesFromApi");
+const {
+  getGeoLocationCoordinatesFromApi,
+} = require('../src/components/utils/getGeoLocationCoordinatesFromApi');
 
 test('Entering New York should send back latitude and longitude coordinates', () => {
-   return getGeoLocationCoordinatesFromApi("New York").then((response) => {
-       expect(response).toHaveProperty('lat');
-       expect(response).toHaveProperty('lon');
-   })
-})
+  return getGeoLocationCoordinatesFromApi('New York').then((response) => {
+    expect(response).toHaveProperty('lat');
+    expect(response).toHaveProperty('lon');
+  });
+});
